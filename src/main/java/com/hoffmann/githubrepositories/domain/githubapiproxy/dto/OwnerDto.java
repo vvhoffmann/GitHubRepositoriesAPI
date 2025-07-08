@@ -1,7 +1,7 @@
-package com.hoffmann.githubrepositories.domain.model;
+package com.hoffmann.githubrepositories.domain.githubapiproxy.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record Owner(String login) {
+public record OwnerDto(String login) {
 }

@@ -1,10 +1,6 @@
 package com.hoffmann.githubrepositories.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Builder;
+import java.util.List;
 
-@Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
-public record GitHubRepo(String name, Owner owner, boolean fork){
+public record GitHubRepo(String name, String owner, List<Branch> branches) {
 }

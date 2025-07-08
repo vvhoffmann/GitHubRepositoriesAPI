@@ -21,13 +21,12 @@ public class GitHubServerProxy {
         this.restTemplate = restTemplate;
     }
 
-    public String makeGetRequest(String username) {
+    public String makeGetReposRequest(String owner) {
         UriComponentsBuilder builder = UriComponentsBuilder
                 .newInstance()
                 .scheme("https")
                 .host(url)
-                .path("/users/" + username + "/repos");
-
+                .path("/users/" + owner + "/repos");
         try {
             ResponseEntity<String> response = restTemplate.exchange(
                     builder.build().toUri(),
@@ -37,7 +36,27 @@ public class GitHubServerProxy {
             );
             return response.getBody();
         } catch (IllegalArgumentException exception) {
-            log.error("Username " + username + " does not exist");
+            log.error("Username " + owner + " does not exist");
+        }
+        return null;
+    }
+
+    public String makeGetBranchByRepoRequest(String owner, String repo) {
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .newInstance()
+                .scheme("https")
+                .host(url)
+                .path("/repos/" + owner + "/" + repo + "/branches");
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(
+                    builder.build().toUri(),
+                    HttpMethod.GET,
+                    null,
+                    String.class
+            );
+            return response.getBody();
+        } catch (RuntimeException exception) {
+            log.error("Fetching branches from " + repo + " failed");
         }
         return null;
     }
