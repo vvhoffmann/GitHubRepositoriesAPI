@@ -1,4 +1,4 @@
-package com.hoffmann.githubrepositories;
+package com.hoffmann.githubrepositories.apivalidation;
 
 public class UserNotFoundException extends RuntimeException {
 

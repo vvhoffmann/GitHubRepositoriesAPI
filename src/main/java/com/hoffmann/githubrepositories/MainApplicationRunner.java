@@ -1,6 +1,6 @@
 package com.hoffmann.githubrepositories;
 
-import com.hoffmann.githubrepositories.domain.service.GitHubRepoService;
+import com.hoffmann.githubrepositories.domain.service.RepoProxyService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
@@ -8,14 +8,13 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class MainApplicationRunner {
 
-    GitHubRepoService gitHubRepoService;
+    RepoProxyService repoProxyService;
 
-    public MainApplicationRunner(GitHubRepoService gitHubRepoService) {
-        this.gitHubRepoService = gitHubRepoService;
+    public MainApplicationRunner(RepoProxyService repoProxyService) {
+        this.repoProxyService = repoProxyService;
     }
 
     public void run() {
         log.info("Starting application");
-        log.info(gitHubRepoService.fetchAllInfo("kalqa"));
     }
 }

@@ -2,8 +2,8 @@ package com.hoffmann.githubrepositories.domain.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hoffmann.githubrepositories.domain.githubapiproxy.dto.BranchDto;
-import com.hoffmann.githubrepositories.domain.githubapiproxy.dto.GitHubRepoDto;
+import com.hoffmann.githubrepositories.domain.apiproxy.dto.BranchDto;
+import com.hoffmann.githubrepositories.domain.apiproxy.dto.RepoDto;
 import com.hoffmann.githubrepositories.domain.model.Branch;
 import com.hoffmann.githubrepositories.domain.model.GitHubRepo;
 import lombok.extern.log4j.Log4j2;
@@ -15,19 +15,19 @@ import java.util.List;
 
 @Service
 @Log4j2
-public class GitHubRepoMapper {
+public class RepoProxyMapper {
 
     private final ObjectMapper objectMapper;
 
-    public GitHubRepoMapper(ObjectMapper objectMapper) {
+    public RepoProxyMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
-    public List<GitHubRepoDto> mapJsonToGitHubRepoListResponseDto(String jsonResponse) {
+    public List<RepoDto> mapJsonToGitHubRepoListResponseDto(String jsonResponse) {
         try {
             return objectMapper.readValue(
                     jsonResponse,
-                    objectMapper.getTypeFactory().constructCollectionType(List.class, GitHubRepoDto.class)
+                    objectMapper.getTypeFactory().constructCollectionType(List.class, RepoDto.class)
             );
         } catch (JsonProcessingException exception) {
             log.error("GitHubRepoMapper couldn't map json: " + exception.getMessage());
@@ -47,7 +47,7 @@ public class GitHubRepoMapper {
         }
     }
 
-    public GitHubRepo mapGitHubRepoAndBranchesListDtoToGitHubRepo(GitHubRepoDto repo, List<BranchDto> branchesDto)
+    public GitHubRepo mapGitHubRepoAndBranchesListDtoToGitHubRepo(RepoDto repo, List<BranchDto> branchesDto)
     {
         List<Branch> branches = mapBranchesDtoListToBranchesList(branchesDto);
         return new GitHubRepo(repo.name(), repo.owner().login(), branches);
