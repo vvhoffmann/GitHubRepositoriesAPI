@@ -1,4 +1,4 @@
-package com.hoffmann.githubrepositories.infrastructure.controller.dto;
+package com.hoffmann.githubrepositories.infrastructure.controller;
 
 public class GitHubRepositoryRestController {
 }
