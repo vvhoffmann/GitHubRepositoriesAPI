@@ -4,18 +4,8 @@
 ![Spring Boot 3.5](https://img.shields.io/badge/Spring%20Boot-3.5.x-brightgreen.svg)
 ![Build](https://img.shields.io/badge/build-Maven-blueviolet)
 
-> **GitHub Repositories API** is a lightweight Spring Boot 3.5 microservice that exposes a single REST endpoint returning the public repositories of any GitHub user. JSON is the default response format, but XML is available via content negotiation.
+> **GitHub Repositories API** is a lightweight Spring Boot 3.5 microservice that exposes a single REST endpoint returning the public repositories of any GitHub user in a format that is showing repository name, owner and all branches with last commit sha.. JSON is the default response format, but XML is available via content negotiation.
 
----
-
-## Table of Contents
-1. [Features](#features)
-2. [Quick Start](#quick-start)
-3. [Configuration](#configuration)
-4. [API Reference](#api-reference)
-5. [GitHub Rate Limits](#github-rate-limits)
-
----
 
 ## Features
 
