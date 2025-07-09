@@ -1,4 +1,4 @@
-package com.hoffmann.githubrepositories.apivalidation;
+package com.hoffmann.githubrepositories.apivalidation.dto;
 
 import org.springframework.http.HttpStatusCode;
 

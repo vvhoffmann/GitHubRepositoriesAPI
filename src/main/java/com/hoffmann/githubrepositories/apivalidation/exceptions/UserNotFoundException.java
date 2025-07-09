@@ -1,4 +1,4 @@
-package com.hoffmann.githubrepositories.apivalidation;
+package com.hoffmann.githubrepositories.apivalidation.exceptions;
 
 import org.springframework.http.HttpStatus;
 

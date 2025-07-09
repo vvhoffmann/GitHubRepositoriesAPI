@@ -1,7 +1,7 @@
 package com.hoffmann.githubrepositories.domain.service;
 
-import com.hoffmann.githubrepositories.apivalidation.ApiLimitExceededException;
-import com.hoffmann.githubrepositories.apivalidation.UserNotFoundException;
+import com.hoffmann.githubrepositories.apivalidation.exceptions.ApiLimitExceededException;
+import com.hoffmann.githubrepositories.apivalidation.exceptions.UserNotFoundException;
 import com.hoffmann.githubrepositories.domain.apiproxy.GitHubAPIProxy;
 import com.hoffmann.githubrepositories.domain.apiproxy.dto.BranchDto;
 import com.hoffmann.githubrepositories.domain.apiproxy.dto.RepoDto;
