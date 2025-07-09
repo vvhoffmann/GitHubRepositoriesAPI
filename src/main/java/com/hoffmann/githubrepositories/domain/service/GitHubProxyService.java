@@ -13,14 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class RepoProxyService {
+public class GitHubProxyService {
 
     GitHubAPIProxy gitHubAPIProxy;
-    RepoProxyMapper repoProxyMapper;
+    GitHubProxyMapper gitHubProxyMapper;
 
-    public RepoProxyService(GitHubAPIProxy gitHubAPIProxy, RepoProxyMapper repoProxyMapper) {
+    public GitHubProxyService(GitHubAPIProxy gitHubAPIProxy, GitHubProxyMapper gitHubProxyMapper) {
         this.gitHubAPIProxy = gitHubAPIProxy;
-        this.repoProxyMapper = repoProxyMapper;
+        this.gitHubProxyMapper = gitHubProxyMapper;
     }
 
     public List<GitHubRepo> fetchAllInfo(String owner) {
@@ -28,7 +28,7 @@ public class RepoProxyService {
         List<RepoDto> gitHubRepoList = fetchAllRepos(owner);
         for (RepoDto repo : gitHubRepoList) {
             List<BranchDto> branchesDto = fetchAllBranches(owner, repo.name());
-            GitHubRepo gitHubRepo = repoProxyMapper.mapGitHubRepoAndBranchesListDtoToGitHubRepo(repo, branchesDto);
+            GitHubRepo gitHubRepo = gitHubProxyMapper.mapGitHubRepoAndBranchesListDtoToGitHubRepo(repo, branchesDto);
             gitHubRepoFinalList.add(gitHubRepo);
         }
         return gitHubRepoFinalList;
@@ -37,7 +37,7 @@ public class RepoProxyService {
     private List<RepoDto> fetchAllRepos(String username) {
         try {
             String jsonResponse = gitHubAPIProxy.makeGetReposRequest(username);
-            return repoProxyMapper.mapJsonToGitHubRepoListResponseDto(jsonResponse)
+            return gitHubProxyMapper.mapJsonToGitHubRepoListResponseDto(jsonResponse)
                     .stream()
                     .filter(repo -> !repo.fork())
                     .toList();
@@ -51,7 +51,7 @@ public class RepoProxyService {
     private List<BranchDto> fetchAllBranches(String owner, String repoName) {
         try {
             String jsonResponse = gitHubAPIProxy.makeGetBranchByRepoRequest(owner, repoName);
-            return repoProxyMapper.mapJsonToGitHubRepoWithBranchesListResponseDto(jsonResponse);
+            return gitHubProxyMapper.mapJsonToGitHubRepoWithBranchesListResponseDto(jsonResponse);
         } catch (HttpClientErrorException exception) {
             throw new UserNotFoundException("This username doesn't exist");
         }

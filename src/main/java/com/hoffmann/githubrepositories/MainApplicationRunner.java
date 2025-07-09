@@ -1,6 +1,6 @@
 package com.hoffmann.githubrepositories;
 
-import com.hoffmann.githubrepositories.domain.service.RepoProxyService;
+import com.hoffmann.githubrepositories.domain.service.GitHubProxyService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class MainApplicationRunner {
 
-    RepoProxyService repoProxyService;
+    GitHubProxyService gitHubProxyService;
 
-    public MainApplicationRunner(RepoProxyService repoProxyService) {
-        this.repoProxyService = repoProxyService;
+    public MainApplicationRunner(GitHubProxyService gitHubProxyService) {
+        this.gitHubProxyService = gitHubProxyService;
     }
 
     public void run() {

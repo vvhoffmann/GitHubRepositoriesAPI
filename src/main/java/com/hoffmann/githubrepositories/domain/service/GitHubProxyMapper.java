@@ -15,11 +15,11 @@ import java.util.List;
 
 @Service
 @Log4j2
-public class RepoProxyMapper {
+public class GitHubProxyMapper {
 
     private final ObjectMapper objectMapper;
 
-    public RepoProxyMapper(ObjectMapper objectMapper) {
+    public GitHubProxyMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
