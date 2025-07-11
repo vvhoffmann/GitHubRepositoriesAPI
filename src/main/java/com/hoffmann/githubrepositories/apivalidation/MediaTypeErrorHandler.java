@@ -1,7 +1,7 @@
 package com.hoffmann.githubrepositories.apivalidation;
 
 import com.hoffmann.githubrepositories.apivalidation.dto.ErrorResponse;
-import com.hoffmann.githubrepositories.infrastructure.controller.GitHubRepoRestController;
+import com.hoffmann.githubrepositories.infrastructure.controller.GitHubRepositoriesRestController;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Log4j2
-@ControllerAdvice(assignableTypes = GitHubRepoRestController.class)
+@ControllerAdvice(assignableTypes = GitHubRepositoriesRestController.class)
 public class MediaTypeErrorHandler {
 
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)

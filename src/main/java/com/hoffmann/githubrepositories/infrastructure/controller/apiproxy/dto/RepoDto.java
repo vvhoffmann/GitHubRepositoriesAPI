@@ -1,4 +1,4 @@
-package com.hoffmann.githubrepositories.domain.apiproxy.dto;
+package com.hoffmann.githubrepositories.infrastructure.controller.apiproxy.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

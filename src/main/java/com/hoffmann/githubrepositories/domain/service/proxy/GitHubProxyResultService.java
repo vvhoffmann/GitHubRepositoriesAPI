@@ -1,11 +1,11 @@
-package com.hoffmann.githubrepositories.domain.service;
+package com.hoffmann.githubrepositories.domain.service.proxy;
 
 import com.hoffmann.githubrepositories.apivalidation.exceptions.ApiLimitExceededException;
 import com.hoffmann.githubrepositories.apivalidation.exceptions.UserNotFoundException;
-import com.hoffmann.githubrepositories.domain.apiproxy.GitHubAPIProxy;
-import com.hoffmann.githubrepositories.domain.apiproxy.dto.BranchDto;
-import com.hoffmann.githubrepositories.domain.apiproxy.dto.RepoDto;
-import com.hoffmann.githubrepositories.domain.model.GitHubRepo;
+import com.hoffmann.githubrepositories.infrastructure.controller.apiproxy.GitHubAPIProxy;
+import com.hoffmann.githubrepositories.infrastructure.controller.apiproxy.dto.BranchDto;
+import com.hoffmann.githubrepositories.infrastructure.controller.apiproxy.dto.RepoDto;
+import com.hoffmann.githubrepositories.domain.model.GitHubResult;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -13,31 +13,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class GitHubProxyService {
+public class GitHubProxyResultService {
 
     GitHubAPIProxy gitHubAPIProxy;
-    GitHubProxyMapper gitHubProxyMapper;
+    GitHubProxyResultMapper gitHubProxyResultMapper;
 
-    public GitHubProxyService(GitHubAPIProxy gitHubAPIProxy, GitHubProxyMapper gitHubProxyMapper) {
+    public GitHubProxyResultService(GitHubAPIProxy gitHubAPIProxy, GitHubProxyResultMapper gitHubProxyResultMapper) {
         this.gitHubAPIProxy = gitHubAPIProxy;
-        this.gitHubProxyMapper = gitHubProxyMapper;
+        this.gitHubProxyResultMapper = gitHubProxyResultMapper;
     }
 
-    public List<GitHubRepo> fetchAllInfo(String owner) {
-        List<GitHubRepo> gitHubRepoFinalList = new ArrayList<>();
-        List<RepoDto> gitHubRepoList = fetchAllRepos(owner);
-        for (RepoDto repo : gitHubRepoList) {
+    public List<GitHubResult> fetchAllInfo(String owner) {
+        List<GitHubResult> gitHubResultFinalList = new ArrayList<>();
+        List<RepoDto> repoList = fetchAllRepos(owner);
+        for (RepoDto repo : repoList) {
             List<BranchDto> branchesDto = fetchAllBranches(owner, repo.name());
-            GitHubRepo gitHubRepo = gitHubProxyMapper.mapGitHubRepoAndBranchesListDtoToGitHubRepo(repo, branchesDto);
-            gitHubRepoFinalList.add(gitHubRepo);
+            GitHubResult gitHubDatabaseResult = gitHubProxyResultMapper.mapGitHubRepoAndBranchesListDtoToGitHubResult(repo, branchesDto);
+            gitHubResultFinalList.add(gitHubDatabaseResult);
         }
-        return gitHubRepoFinalList;
+        return gitHubResultFinalList;
     }
 
     private List<RepoDto> fetchAllRepos(String username) {
         try {
             String jsonResponse = gitHubAPIProxy.makeGetReposRequest(username);
-            return gitHubProxyMapper.mapJsonToGitHubRepoListResponseDto(jsonResponse)
+            return gitHubProxyResultMapper.mapJsonToGitHubRepoListResponseDto(jsonResponse)
                     .stream()
                     .filter(repo -> !repo.fork())
                     .toList();
@@ -51,7 +51,7 @@ public class GitHubProxyService {
     private List<BranchDto> fetchAllBranches(String owner, String repoName) {
         try {
             String jsonResponse = gitHubAPIProxy.makeGetBranchByRepoRequest(owner, repoName);
-            return gitHubProxyMapper.mapJsonToGitHubRepoWithBranchesListResponseDto(jsonResponse);
+            return gitHubProxyResultMapper.mapJsonToGitHubRepoWithBranchesListResponseDto(jsonResponse);
         } catch (HttpClientErrorException exception) {
             throw new UserNotFoundException("This username doesn't exist");
         }

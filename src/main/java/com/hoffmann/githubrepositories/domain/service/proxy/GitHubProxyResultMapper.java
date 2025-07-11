@@ -1,11 +1,11 @@
-package com.hoffmann.githubrepositories.domain.service;
+package com.hoffmann.githubrepositories.domain.service.proxy;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hoffmann.githubrepositories.domain.apiproxy.dto.BranchDto;
-import com.hoffmann.githubrepositories.domain.apiproxy.dto.RepoDto;
+import com.hoffmann.githubrepositories.infrastructure.controller.apiproxy.dto.BranchDto;
+import com.hoffmann.githubrepositories.infrastructure.controller.apiproxy.dto.RepoDto;
 import com.hoffmann.githubrepositories.domain.model.Branch;
-import com.hoffmann.githubrepositories.domain.model.GitHubRepo;
+import com.hoffmann.githubrepositories.domain.model.GitHubResult;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +15,11 @@ import java.util.List;
 
 @Service
 @Log4j2
-public class GitHubProxyMapper {
+public class GitHubProxyResultMapper {
 
     private final ObjectMapper objectMapper;
 
-    public GitHubProxyMapper(ObjectMapper objectMapper) {
+    public GitHubProxyResultMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
@@ -47,10 +47,10 @@ public class GitHubProxyMapper {
         }
     }
 
-    public GitHubRepo mapGitHubRepoAndBranchesListDtoToGitHubRepo(RepoDto repo, List<BranchDto> branchesDto)
+    public GitHubResult mapGitHubRepoAndBranchesListDtoToGitHubResult(RepoDto repo, List<BranchDto> branchesDto)
     {
         List<Branch> branches = mapBranchesDtoListToBranchesList(branchesDto);
-        return new GitHubRepo(repo.name(), repo.owner().login(), branches);
+        return new GitHubResult(repo.owner().login(), repo.name(), branches);
     }
 
     private List<Branch> mapBranchesDtoListToBranchesList(List<BranchDto> branches)
