@@ -35,7 +35,7 @@ public class GitHubProxyResultMapper {
         }
     }
 
-    public List<BranchDto> mapJsonToGitHubRepoWithBranchesListResponseDto(String jsonResponse) {
+    public List<BranchDto> mapJsonToListBranchesDto(String jsonResponse) {
         try {
             return objectMapper.readValue(
                     jsonResponse,

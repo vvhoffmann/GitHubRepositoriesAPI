@@ -41,7 +41,7 @@ public class GitHubAPIProxy {
         return null;
     }
 
-    public String makeGetBranchByRepoRequest(String owner, String repo) {
+    public String makeGetBranchesByRepoRequest(String owner, String repo) {
         UriComponentsBuilder builder = UriComponentsBuilder
                 .newInstance()
                 .scheme("https")
