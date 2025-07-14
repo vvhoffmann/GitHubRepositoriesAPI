@@ -11,6 +11,10 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @Service
 public class GitHubProxyResultService {
@@ -24,13 +28,24 @@ public class GitHubProxyResultService {
     }
 
     public List<GitHubResult> fetchAllInfo(String owner) {
-        List<GitHubResult> gitHubResultFinalList = new ArrayList<>();
-        List<RepoDto> repoList = fetchAllRepos(owner);
-        for (RepoDto repo : repoList) {
-            List<BranchDto> branchesDto = fetchAllBranches(owner, repo.name());
-            GitHubResult gitHubDatabaseResult = gitHubProxyResultMapper.mapGitHubRepoAndBranchesListDtoToGitHubResult(repo, branchesDto);
-            gitHubResultFinalList.add(gitHubDatabaseResult);
+        List<RepoDto> repoNames = fetchAllRepos(owner);
+
+        ExecutorService executorService = Executors.newFixedThreadPool(repoNames.size());
+        List<Future<GitHubResult>> futures = new ArrayList<>();
+        for (RepoDto repo : repoNames) {
+            futures.add(executorService.submit(() -> getGitHubResult(owner, repo)));
         }
+
+        List<GitHubResult> gitHubResultFinalList = new ArrayList<>();
+        for(Future<GitHubResult> future : futures) {
+            try {
+                GitHubResult gitHubResult = future.get();
+                gitHubResultFinalList.add(gitHubResult);
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        executorService.shutdown();
         return gitHubResultFinalList;
     }
 
@@ -48,12 +63,17 @@ public class GitHubProxyResultService {
         }
     }
 
-    private List<BranchDto> fetchAllBranches(String owner, String repoName) {
+    private GitHubResult getGitHubResult(String owner, RepoDto repo) {
         try {
-            String jsonResponse = gitHubAPIProxy.makeGetBranchByRepoRequest(owner, repoName);
-            return gitHubProxyResultMapper.mapJsonToGitHubRepoWithBranchesListResponseDto(jsonResponse);
+            List<BranchDto> branchesDto = fetchAllBranches(owner, repo);
+            return gitHubProxyResultMapper.mapGitHubRepoAndBranchesListDtoToGitHubResult(repo, branchesDto);
         } catch (HttpClientErrorException exception) {
             throw new UserNotFoundException("This username doesn't exist");
         }
+    }
+
+    private List<BranchDto> fetchAllBranches(String owner, RepoDto repo) {
+        String jsonResponse = gitHubAPIProxy.makeGetBranchesByRepoRequest(owner, repo.name());
+        return gitHubProxyResultMapper.mapJsonToListBranchesDto(jsonResponse);
     }
 }
